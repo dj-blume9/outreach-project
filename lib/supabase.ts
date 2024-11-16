@@ -2,7 +2,7 @@
 import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createClient} from '@supabase/supabase-js';
-import Contact from '@/app/types/Contact';
+import {Contact} from '@/types/Contact';
 
 const supabaseUrl = 'https://pvckadfvhxoudafoniel.supabase.co';
 const supabaseAnonKey =

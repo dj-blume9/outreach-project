@@ -1,5 +1,5 @@
 ﻿import React, { useState } from 'react';
-import {View, Text, Button, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Account from "@/app/components/Account";
 import { Session } from '@supabase/supabase-js';
 import Contacts from "@/app/components/Contacts";

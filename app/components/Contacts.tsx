@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
-import { fetchContactsByOrganization } from '@/app/lib/supabase';
-import Contact from '@/app/types/Contact'; // Adjust the import path for your Contact type
+import { fetchContactsByOrganization } from '@/lib/supabase';
+import {Contact} from '@/types/Contact'; // Adjust the import path for your Contact type
 
 interface ContactsProps {}
 
@@ -23,7 +23,7 @@ const Contacts: React.FC<ContactsProps> = () => {
             }
         };
 
-        getContactsForOrganization();
+        getContactsForOrganization().then(r => r);
     }, []);
 
     if (loading) {
