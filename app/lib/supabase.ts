@@ -1,7 +1,7 @@
-﻿import { AppState } from 'react-native';
+﻿import {AppState} from 'react-native';
 import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createClient, PostgrestResponse } from '@supabase/supabase-js';
+import {createClient} from '@supabase/supabase-js';
 import Contact from '@/app/types/Contact';
 
 const supabaseUrl = 'https://pvckadfvhxoudafoniel.supabase.co';
@@ -51,9 +51,8 @@ export const fetchContactsByOrganization = async (
         }
 
         // Extract contacts from the nested response
-        const contacts = data?.map((item) => item.contacts) || [];
         // @ts-ignore
-        return contacts;
+        return data?.map((item) => item.contacts) || [];
     } catch (error) {
         console.error('Error fetching contacts by organization:', error);
         return [];
@@ -63,10 +62,9 @@ export const fetchContactsByOrganization = async (
 // Tells Supabase Auth to continuously refresh the session automatically
 AppState.addEventListener('change', (state) => {
     if (state === 'active') {
-        supabase.auth.startAutoRefresh();
+        supabase.auth.startAutoRefresh().then(r => console.log(r));
     } else {
-        supabase.auth.stopAutoRefresh();
+        supabase.auth.stopAutoRefresh().then(r => console.log(r));
     }
 });
 
-export default { supabase };
