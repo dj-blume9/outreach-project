@@ -24,7 +24,7 @@ const Hub: React.FC<HubProps> = ({ session }) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.content}>{renderComponent()}</ScrollView>
+            <View style={styles.content}>{renderComponent()}</View>
             <View style={styles.footer}>
                 <TouchableOpacity  onPress={() => setActiveComponent('Account')} style={styles.tab}>
                     <Text style={styles.text}>Account</Text>
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     },
     content: {
         paddingBottom: 100,
+        height: '100%',
     },
     footer: {
         flexDirection: 'row',
@@ -68,7 +69,6 @@ const styles = StyleSheet.create({
     },
     tab: {
         width: '50%',
-        borderLeftWidth: 1,
     }
 });
 
