@@ -2,10 +2,7 @@
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import {fetchContactsByOrganization, fetchOrganizationIdsByUserId} from '@/lib/supabase';
 import {Contact} from '@/types/Contact';
-import {useUser} from "@/app/components/UserProvider";
 import {CountryCode, parsePhoneNumberFromString} from 'libphonenumber-js';
-import {User} from "@supabase/auth-js";
-import {UUID} from "node:crypto";
 
 interface ContactsProps {
     userId: string;

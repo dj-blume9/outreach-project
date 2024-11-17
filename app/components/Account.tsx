@@ -4,7 +4,11 @@ import { StyleSheet, View, Alert } from 'react-native'
 import { Button, Input } from '@rneui/themed'
 import { Session } from '@supabase/supabase-js'
 
-export default function Account({ session }: { session: Session }) {
+interface AccountProps {
+    session: Session;
+}
+
+const Account: React.FC<AccountProps> = ({ session }) => {
     const [loading, setLoading] = useState(true)
     const [username, setUsername] = useState('')
 
@@ -106,3 +110,5 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
 })
+
+export default Account;
