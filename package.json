@@ -34,6 +34,7 @@
     "expo-symbols": "~0.2.0",
     "expo-system-ui": "~4.0.2",
     "expo-web-browser": "~14.0.0",
+    "libphonenumber-js": "^1.11.14",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "^0.76.1",
@@ -63,7 +64,9 @@
   "private": true,
   "expo": {
     "router": {
-      "ignoreRoutes": ["types/*"]
+      "ignoreRoutes": [
+        "types/*"
+      ]
     }
   }
 }

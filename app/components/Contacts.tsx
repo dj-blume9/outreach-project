@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, FlatList, AppState } from 'react-native';
 import {fetchContactsByOrganization, fetchOrganizationIdsByUserId} from '@/lib/supabase';
 import {Contact} from '@/types/Contact';
 import {useUser} from "@/app/components/UserProvider";
+import {CountryCode, parsePhoneNumberFromString} from 'libphonenumber-js';
 
 interface ContactsProps {}
 
@@ -31,6 +32,11 @@ const Contacts: React.FC<ContactsProps> = () => {
         getContactsForOrganization().then(r => r);
     }, []);
 
+    const formatPhoneNumber = (number: string, countryCode: CountryCode = 'US') => {
+        const phoneNumber = parsePhoneNumberFromString(number, countryCode);
+        return phoneNumber ? phoneNumber.formatNational() : number;
+    };
+
     if (loading) {
         return (
             <View style={styles.container}>
@@ -54,7 +60,7 @@ const Contacts: React.FC<ContactsProps> = () => {
                                 {item.first_name} {item.last_name}
                             </Text>
                             <Text style={styles.contactEmail}>{item.email_address}</Text>
-                            <Text style={styles.contactPhone}>{item.phone_number}</Text>
+                            <Text style={styles.contactPhone}>{formatPhoneNumber(item.phone_number.toString())}</Text>
                         </View>
                     )}
                 />
