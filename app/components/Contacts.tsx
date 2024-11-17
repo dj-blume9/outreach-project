@@ -1,21 +1,26 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
-import { fetchContactsByOrganization } from '@/lib/supabase';
-import {Contact} from '@/types/Contact'; // Adjust the import path for your Contact type
+import { StyleSheet, View, Text, FlatList, AppState } from 'react-native';
+import {fetchContactsByOrganization, fetchOrganizationIdsByUserId} from '@/lib/supabase';
+import {Contact} from '@/types/Contact';
+import {useUser} from "@/app/components/UserProvider";
 
 interface ContactsProps {}
 
 const Contacts: React.FC<ContactsProps> = () => {
     const [contacts, setContacts] = useState<Contact[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [appState, setAppState] = useState<string>(AppState.currentState);
+    const {user} = useUser();
 
     // Fetch contacts on component mount
     useEffect(() => {
         const getContactsForOrganization = async () => {
             try {
-                const organizationId = 1; // Replace with your organization's ID
-                const fetchedContacts = await fetchContactsByOrganization(organizationId);
-                setContacts(fetchedContacts);
+                if(user) {
+                    let organizationId = await fetchOrganizationIdsByUserId(user.id);
+                    const fetchedContacts = await fetchContactsByOrganization(organizationId[0]);
+                    setContacts(fetchedContacts);
+                }
             } catch (error) {
                 console.error('Error fetching contacts:', error);
             } finally {

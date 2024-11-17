@@ -3,6 +3,8 @@ import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createClient} from '@supabase/supabase-js';
 import {Contact} from '@/types/Contact';
+import {UUID} from "node:crypto";
+import {number} from "prop-types";
 
 const supabaseUrl = 'https://pvckadfvhxoudafoniel.supabase.co';
 const supabaseAnonKey =
@@ -17,11 +19,31 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     },
 });
 
-/**
- * Fetch contacts by organization ID.
- * @param {number} organizationId - The ID of the organization.
- * @returns {Promise<Contact[]>} - A list of contacts belonging to the organization.
- */
+export const fetchOrganizationIdsByUserId = async (userId: UUID): Promise<number[]> => {
+    try {
+        const { data, error } = await supabase
+            .from('users_organizations')
+            .select('organization_id')
+            .eq('user_id', userId);
+
+        if (error) {
+            throw new Error(`Error fetching organization IDs: ${error.message}`);
+        }
+
+        if (!data || data.length === 0) {
+            console.log('No organizations found for this user.');
+            return [];
+        }
+
+        // Extract organization IDs as a number array
+        const organizationIds = data.map((row) => Number(row.organization_id));
+        return organizationIds;
+    } catch (error) {
+        console.error('Error fetching organization IDs:', error);
+        return [];
+    }
+};
+
 export const fetchContactsByOrganization = async (
     organizationId: number
 ): Promise<Contact[]> => {
