@@ -3,6 +3,8 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Account from "@/app/components/Account";
 import { Session } from '@supabase/supabase-js';
 import Contacts from "@/app/components/Contacts";
+import {useUser} from "@/app/components/UserProvider";
+import {User, UserContextType} from "@/types/User";
 
 interface HubProps {
     session: Session;
@@ -16,7 +18,7 @@ const Hub: React.FC<HubProps> = ({ session }) => {
             case 'Account':
                 return <Account key={session.user.id} session={session} />;
             case 'Contacts':
-                return <Contacts />;
+                return <Contacts userId={session.user.id} />;
             default:
                 return <Account key={session.user.id} session={session} />;
         }

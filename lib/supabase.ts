@@ -19,7 +19,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     },
 });
 
-export const fetchOrganizationIdsByUserId = async (userId: UUID): Promise<number[]> => {
+export const fetchOrganizationIdsByUserId = async (userId: string): Promise<number[]> => {
     try {
         const { data, error } = await supabase
             .from('users_organizations')

@@ -1,24 +1,26 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList, AppState } from 'react-native';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import {fetchContactsByOrganization, fetchOrganizationIdsByUserId} from '@/lib/supabase';
 import {Contact} from '@/types/Contact';
 import {useUser} from "@/app/components/UserProvider";
 import {CountryCode, parsePhoneNumberFromString} from 'libphonenumber-js';
+import {User} from "@supabase/auth-js";
+import {UUID} from "node:crypto";
 
-interface ContactsProps {}
+interface ContactsProps {
+    userId: string;
+}
 
-const Contacts: React.FC<ContactsProps> = () => {
+const Contacts: React.FC<ContactsProps> = ({userId}) => {
     const [contacts, setContacts] = useState<Contact[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [appState, setAppState] = useState<string>(AppState.currentState);
-    const {user} = useUser();
 
     // Fetch contacts on component mount
     useEffect(() => {
         const getContactsForOrganization = async () => {
             try {
-                if(user) {
-                    let organizationId = await fetchOrganizationIdsByUserId(user.id);
+                if(userId) {
+                    let organizationId = await fetchOrganizationIdsByUserId(userId);
                     const fetchedContacts = await fetchContactsByOrganization(organizationId[0]);
                     setContacts(fetchedContacts);
                 }
