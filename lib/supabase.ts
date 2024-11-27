@@ -105,25 +105,41 @@ export const fetchContactsByOrganization = async (
     }
 };
 
-export const fetchUserRoleByUserId = async (userId: string): Promise<string> => {
+export const deleteContact = async (contactId: number): Promise<boolean> => {
     try {
-        const { data, error } = await supabase
-            .from('users')
-            .select('role_id')
-            .eq('id', userId);
+        await deleteOraganizationContact(contactId);
+        
+        const { error } = await supabase
+            .from('contacts')
+            .delete()
+            .eq('id', contactId);
 
         if (error) {
-            throw new Error(`Error fetching user role: ${error.message}`);
+            throw new Error(`Error deleting contact: ${error.message}`);
         }
 
-        if (!data || data.length === 0) {
-            throw new Error('No user found with this ID.');
-        }
-
-        return data[0].role_id;
+        return true;
     } catch (error) {
-        console.error('Error fetching user role:', error);
-        return '';
+        console.error('Error deleting contact:', error);
+        return false;
+    }
+}
+
+const deleteOraganizationContact = async (contactId: number): Promise<boolean> => {
+    try {
+        const { error } = await supabase
+            .from('organizations_contacts')
+            .delete()
+            .eq('contact_id', contactId);
+
+        if (error) {
+            throw new Error(`Error deleting contact: ${error.message}`);
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error deleting contact:', error);
+        return false;
     }
 }
 

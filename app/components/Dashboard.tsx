@@ -8,14 +8,14 @@ import ContactList from "@/app/components/ContactList";
 interface DashboardProps {
     user: User;
     contacts: Contact[];
-    onRefresh: () => void;
+    updateApp: () => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({user, contacts, onRefresh}) => {
+const Dashboard: React.FC<DashboardProps> = ({user, contacts, updateApp}) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [unassignedContacts, setUnassignedContacts] = useState<Contact[]>([]);
     const [newContacts, setNewContacts] = useState<Contact[]>([]);
-
+    
     const getUnassignedContacts =  () => {
         try {
             if(user.id) {
@@ -60,11 +60,11 @@ const Dashboard: React.FC<DashboardProps> = ({user, contacts, onRefresh}) => {
                 <Text style={styles.header}>
                     Unassigned Contacts
                 </Text>
-                <ContactList contacts={unassignedContacts} onRefresh={onRefresh} />
+                <ContactList contacts={unassignedContacts} updateApp={updateApp}/>
                 <Text style={styles.header}>
                     New Contacts
                 </Text>
-                <ContactList contacts={newContacts} onRefresh={onRefresh} />
+                <ContactList contacts={newContacts} updateApp={updateApp}/>
             </View>
         );
     }

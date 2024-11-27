@@ -5,19 +5,10 @@ import ContactCard from "@/app/components/ContactCard";
 
 interface ContactsProps {
     contacts: Contact[];
-    onRefresh: () => void;
+    updateApp: () => void;
 }
 
-const Contacts: React.FC<ContactsProps> = ({ contacts, onRefresh}) => {
-
-    const [refreshing, setRefreshing] = useState(false);
-    
-    const swipeToRefresh = () => {
-        setRefreshing(true);
-        onRefresh();
-        setRefreshing(false);
-    }
-
+const Contacts: React.FC<ContactsProps> = ({ contacts, updateApp}) => {
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Contacts</Text>
@@ -28,11 +19,8 @@ const Contacts: React.FC<ContactsProps> = ({ contacts, onRefresh}) => {
                     data={contacts}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <ContactCard contact={item} adminControls={true}/>
+                        <ContactCard contact={item} adminControls={true} updateApp={updateApp}/>
                     )}
-                    refreshControl={
-                        <RefreshControl refreshing={refreshing} onRefresh={swipeToRefresh} />
-                    }
                 />
             )}
         </View>

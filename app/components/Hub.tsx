@@ -18,6 +18,7 @@ const Hub: React.FC<HubProps> = ({ session }) => {
     const [contacts, setContacts] = useState<Contact[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [user, setUser] = useState<User>();
+    const [refreshKey, setRefreshKey] = useState<number>(0);
     
     const getUser = async () => {
         try {
@@ -45,31 +46,45 @@ const Hub: React.FC<HubProps> = ({ session }) => {
         }
     };
     
-    const onRefresh = () => {
-        getContactsForOrganization().then(r => r);
+    const updateApp = async () => {
+        await getContactsForOrganization().then(r => r);
+        setRefreshKey(refreshKey + 1);
     }
     
     // Fetch contacts on component mount
     useEffect(() => {
-        getContactsForOrganization().then(r => r);
-        getUser().then(r => r);
+        const fetchData = async () => {
+            await getUser();
+            await getContactsForOrganization();
+        };
+        fetchData();
     }, []);
     
-    
     const renderComponent = () => {
+        if(loading) return <Text>Loading...</Text>;
         if(!user) return <Text>Loading...</Text>;
         switch (activeComponent) {
             case 'Dashboard':
-                return <Dashboard user={user} contacts={contacts} onRefresh={onRefresh}/>;
+                return <Dashboard key={refreshKey} user={user} contacts={contacts} updateApp={updateApp}/>;
             case 'Contacts':
-                return <Contacts contacts={contacts} onRefresh={onRefresh}/>;
+                return <Contacts key={refreshKey} contacts={contacts} updateApp={updateApp}/>;
+            case 'Account':
+                return <Account key={refreshKey} session={session} />;
             default:
-                return <Account key={session.user.id} session={session} />;
+                return <Account key={refreshKey} session={session} />;
         }        
     };
 
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => setActiveComponent('Account')}>
+                    <MaterialIcons name={'settings'} size={40} color={'black'} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={updateApp}>
+                    <MaterialIcons name={'refresh'} size={40} color={'black'} />
+                </TouchableOpacity>
+            </View>
             <View style={styles.content}>{renderComponent()}</View>
             <View style={styles.footer}>
                 <TouchableOpacity  onPress={() => setActiveComponent('Dashboard')} style={styles.tab}>
@@ -93,6 +108,17 @@ const styles = StyleSheet.create({
     content: {
         paddingBottom: 100,
         height: '100%',
+    },
+    header: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        padding: 16,
+        backgroundColor: '#f8f8f8',
+        borderBottomWidth: 1,
+        borderColor: '#ddd',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     footer: {
         flexDirection: 'row',

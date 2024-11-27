@@ -1,16 +1,27 @@
 ﻿import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {formatPhoneNumber} from "@/lib/helper";
+import {deleteContact} from "@/lib/supabase";
 import {Contact} from "@/types/Contact";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 interface ContactCardProps {
     contact: Contact;
     adminControls: boolean;
+    updateApp: () => void;
 }
 
-const ContactCard: React.FC<ContactCardProps> = ({contact, adminControls}) => {
+const ContactCard: React.FC<ContactCardProps> = ({contact, adminControls, updateApp}) => {
 
-
+    const removeContact = async (contactId: number) => {
+        try {
+            await deleteContact(contactId);
+            updateApp();
+        } catch (error) {
+            console.error('Error deleting contact:', error);
+        }
+    }
+    
     return (
         <View style={styles.contactCard}>
             <View style={styles.contactDetails}>
@@ -22,7 +33,9 @@ const ContactCard: React.FC<ContactCardProps> = ({contact, adminControls}) => {
             </View>
             {adminControls && (
                 <View style={styles.adminControlsContainer}>
-                    <Text>Admin Controls</Text>
+                    <TouchableOpacity onPress={() => removeContact(contact.id)}>
+                        <MaterialIcons name={'delete'} size={24} color={'#555'} /> 
+                    </TouchableOpacity>
                 </View>
             )}
         </View>
