@@ -1,6 +1,6 @@
 ﻿import React, { useState } from 'react'
 import { Alert, StyleSheet, View } from 'react-native'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/api/supabase'
 import { Button, Input } from '@rneui/themed'
 
 export default function Auth() {
@@ -32,7 +32,6 @@ export default function Auth() {
         if (error)
         {
             Alert.alert("Error:" + error.message)
-            console.log(error);
         }
         if (!session) Alert.alert('Please check your inbox for email verification!')
         setLoading(false)

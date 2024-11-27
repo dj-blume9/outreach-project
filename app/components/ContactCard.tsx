@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {formatPhoneNumber} from "@/lib/helper";
-import {deleteContact} from "@/lib/supabase";
+import contactsApi from "@/api/contactsApi";
 import {Contact} from "@/types/Contact";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
@@ -15,7 +15,7 @@ const ContactCard: React.FC<ContactCardProps> = ({contact, adminControls, update
 
     const removeContact = async (contactId: number) => {
         try {
-            await deleteContact(contactId);
+            await contactsApi.deleteContact(contactId);
             updateApp();
         } catch (error) {
             console.error('Error deleting contact:', error);

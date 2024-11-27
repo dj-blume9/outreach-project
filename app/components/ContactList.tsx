@@ -1,5 +1,5 @@
 ﻿import React, {useState} from 'react';
-import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet} from 'react-native';
 import {Contact} from "@/types/Contact";
 import ContactCard from "@/app/components/ContactCard";
 

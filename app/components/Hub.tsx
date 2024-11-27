@@ -1,12 +1,14 @@
 ﻿import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Account from "@/app/components/Account";
 import { Session } from '@supabase/supabase-js';
 import Contacts from "@/app/components/Contacts";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Dashboard from "@/app/components/Dashboard";
 import {Contact} from "@/types/Contact";
-import {fetchContactsByOrganization, fetchOrganizationIdsByUserId, fetchUserById} from "@/lib/supabase";
+import usersApi from "@/api/usersApi";
+import organizationsApi from "@/api/organizationsApi";
+import contactsApi from "@/api/contactsApi";
 import {User} from "@/types/User";
 
 interface HubProps {
@@ -23,7 +25,7 @@ const Hub: React.FC<HubProps> = ({ session }) => {
     const getUser = async () => {
         try {
             if(session.user.id) {
-                let user = await fetchUserById(session.user.id);
+                let user = await usersApi.fetchUserById(session.user.id);
                 setUser(user);
             }
         }
@@ -35,8 +37,8 @@ const Hub: React.FC<HubProps> = ({ session }) => {
     const getContactsForOrganization = async () => {
         try {
             if(session.user.id) {
-                let organizationId = await fetchOrganizationIdsByUserId(session.user.id);
-                const fetchedContacts = await fetchContactsByOrganization(organizationId[0]);
+                let organizationId = await organizationsApi.fetchOrganizationIdsByUserId(session.user.id);
+                const fetchedContacts = await contactsApi.fetchContactsByOrganization(organizationId[0]);
                 setContacts(fetchedContacts);
             }
         } catch (error) {

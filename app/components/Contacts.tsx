@@ -1,7 +1,9 @@
 ﻿import React, { useEffect, useState } from 'react';
-import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
+import {StyleSheet, View, Text, FlatList, TouchableOpacity, Modal} from 'react-native';
 import {Contact} from '@/types/Contact';
 import ContactCard from "@/app/components/ContactCard";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import AddContactModal from "@/app/components/AddContactModal";
 
 interface ContactsProps {
     contacts: Contact[];
@@ -9,9 +11,17 @@ interface ContactsProps {
 }
 
 const Contacts: React.FC<ContactsProps> = ({ contacts, updateApp}) => {
+    const [modalVisible, setModalVisible] = useState(false);
+    
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Contacts</Text>
+            <AddContactModal visible={modalVisible} onClose={() => setModalVisible(false)}/>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>Contacts</Text>
+                <TouchableOpacity style={styles.addContactButton}>
+                    <MaterialIcons name={'person-add'} size={34} color={'#111'} onPress={() => setModalVisible(true)}/>
+                </TouchableOpacity>
+            </View>
             {contacts.length === 0 ? (
                 <Text style={styles.noContactsText}>No contacts found for this organization.</Text>
             ) : (
@@ -34,9 +44,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+        maxWidth: '100%',
+    },
+    headerText: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 16,
+        flex: 1
+    },
+    addContactButton: {
+        backgroundColor: '#007bff',
+        padding: 8,
+        borderRadius: 4,
     },
     loadingText: {
         fontSize: 16,

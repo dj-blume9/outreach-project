@@ -1,9 +1,9 @@
 ﻿import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import {Contact} from "@/types/Contact";
-import ContactCard from "@/app/components/ContactCard";
 import {User} from "@/types/User";
 import ContactList from "@/app/components/ContactList";
+import {getNewContacts, getUnassignedContacts} from "@/lib/contactsHelper";
 
 interface DashboardProps {
     user: User;
@@ -12,45 +12,13 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({user, contacts, updateApp}) => {
-    const [loading, setLoading] = useState<boolean>(true);
     const [unassignedContacts, setUnassignedContacts] = useState<Contact[]>([]);
     const [newContacts, setNewContacts] = useState<Contact[]>([]);
     
-    const getUnassignedContacts =  () => {
-        try {
-            if(user.id) {
-                let filteredContacts = contacts.filter(contact => contact.assigned_user_id === null);
-                setUnassignedContacts(filteredContacts);
-            }
-        } catch (error) {
-            console.error('Error fetching contacts:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-    
-    const getNewContacts =  () => {
-        try {
-            if(user.id) {
-                const currentDate = new Date();
-                const twoDaysAgo = new Date(currentDate.getTime() - 48 * 60 * 60 * 1000);
-                let filteredContacts = contacts.filter(contact => {
-                    const contactDate = new Date(contact.created_at);
-                    return contactDate >= twoDaysAgo && contactDate <= currentDate;
-                });
-                
-                setNewContacts(filteredContacts);
-            }
-        } catch (error) {
-            console.error('Error fetching contacts:', error);
-        } finally {
-            setLoading(false);
-        }
-    }
     
     useEffect(() => {
-        getUnassignedContacts();
-        getNewContacts();
+        setUnassignedContacts(getUnassignedContacts(contacts));
+        setNewContacts(getNewContacts(contacts));
     }, []);
     
     if(user.role_id == 1)
