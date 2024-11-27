@@ -5,6 +5,7 @@ import {createClient} from '@supabase/supabase-js';
 import {Contact} from '@/types/Contact';
 import {UUID} from "node:crypto";
 import {number} from "prop-types";
+import {User} from "@/types/User";
 
 const supabaseUrl = 'https://pvckadfvhxoudafoniel.supabase.co';
 const supabaseAnonKey =
@@ -18,6 +19,29 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
         detectSessionInUrl: false,
     },
 });
+
+export const fetchUserById = async (userId: string): Promise<User> => {
+    try{
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', userId);
+
+        if (error) {
+            throw new Error(`Error fetching user: ${error.message}`);
+        }
+
+        if (!data || data.length === 0) {
+            throw new Error('No user found with this ID.');
+        }
+
+        return data[0];
+    } 
+    catch (error) {
+        console.error('Error fetching user:', error);
+        return {} as User;
+    }
+}
 
 export const fetchOrganizationIdsByUserId = async (userId: string): Promise<number[]> => {
     try {
@@ -80,6 +104,28 @@ export const fetchContactsByOrganization = async (
         return [];
     }
 };
+
+export const fetchUserRoleByUserId = async (userId: string): Promise<string> => {
+    try {
+        const { data, error } = await supabase
+            .from('users')
+            .select('role_id')
+            .eq('id', userId);
+
+        if (error) {
+            throw new Error(`Error fetching user role: ${error.message}`);
+        }
+
+        if (!data || data.length === 0) {
+            throw new Error('No user found with this ID.');
+        }
+
+        return data[0].role_id;
+    } catch (error) {
+        console.error('Error fetching user role:', error);
+        return '';
+    }
+}
 
 // Tells Supabase Auth to continuously refresh the session automatically
 AppState.addEventListener('change', (state) => {

@@ -1,47 +1,21 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
-import {fetchContactsByOrganization, fetchOrganizationIdsByUserId} from '@/lib/supabase';
+import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
 import {Contact} from '@/types/Contact';
-import {CountryCode, parsePhoneNumberFromString} from 'libphonenumber-js';
+import ContactCard from "@/app/components/ContactCard";
 
 interface ContactsProps {
-    userId: string;
+    contacts: Contact[];
+    onRefresh: () => void;
 }
 
-const Contacts: React.FC<ContactsProps> = ({userId}) => {
-    const [contacts, setContacts] = useState<Contact[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+const Contacts: React.FC<ContactsProps> = ({ contacts, onRefresh}) => {
 
-    // Fetch contacts on component mount
-    useEffect(() => {
-        const getContactsForOrganization = async () => {
-            try {
-                if(userId) {
-                    let organizationId = await fetchOrganizationIdsByUserId(userId);
-                    const fetchedContacts = await fetchContactsByOrganization(organizationId[0]);
-                    setContacts(fetchedContacts);
-                }
-            } catch (error) {
-                console.error('Error fetching contacts:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        getContactsForOrganization().then(r => r);
-    }, []);
-
-    const formatPhoneNumber = (number: string, countryCode: CountryCode = 'US') => {
-        const phoneNumber = parsePhoneNumberFromString(number, countryCode);
-        return phoneNumber ? phoneNumber.formatNational() : number;
-    };
-
-    if (loading) {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.loadingText}>Loading Contacts...</Text>
-            </View>
-        );
+    const [refreshing, setRefreshing] = useState(false);
+    
+    const swipeToRefresh = () => {
+        setRefreshing(true);
+        onRefresh();
+        setRefreshing(false);
     }
 
     return (
@@ -54,14 +28,11 @@ const Contacts: React.FC<ContactsProps> = ({userId}) => {
                     data={contacts}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <View style={styles.contactCard}>
-                            <Text style={styles.contactName}>
-                                {item.first_name} {item.last_name}
-                            </Text>
-                            <Text style={styles.contactEmail}>{item.email_address}</Text>
-                            <Text style={styles.contactPhone}>{formatPhoneNumber(item.phone_number.toString())}</Text>
-                        </View>
+                        <ContactCard contact={item} adminControls={true}/>
                     )}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={swipeToRefresh} />
+                    }
                 />
             )}
         </View>

@@ -5,7 +5,7 @@ import {User, UserContextType} from "@/types/User"; // Import your Supabase clie
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 // Create a provider component
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
@@ -62,3 +62,6 @@ export const useUser = () => {
     }
     return context;
 };
+
+
+export default UserProvider;
