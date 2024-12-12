@@ -1,5 +1,6 @@
 ﻿import { supabase } from '@/api/supabase';
 import { Contact } from '@/types/Contact';
+import {OrganizationContact} from "@/types/OrganizationContacts";
 
 
 const contactsApi = {
@@ -8,6 +9,7 @@ const contactsApi = {
             const { data, error } = await supabase
                 .from('contacts')
                 .insert(contact)
+                .select('*')
                 .single();
 
             if (error) {
@@ -18,6 +20,24 @@ const contactsApi = {
         } catch (error) {
             console.error('Error adding contact:', error);
             return null;
+        }
+    },
+
+    addContactToOrganization: async (organization_contact: OrganizationContact): Promise<boolean> => {
+        try{
+            const { error } = await supabase
+                .from('organizations_contacts')
+                .insert(organization_contact);
+
+            if (error) {
+                throw new Error(`Error adding contact to organization: ${error.message}`);
+            }
+
+            return true;
+        }
+        catch (error) {
+            console.error('Error adding contact to organization:', error);
+            return false;
         }
     },
     

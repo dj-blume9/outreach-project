@@ -1,5 +1,5 @@
 ﻿export interface OrganizationContact {
-    id: number;
+    id?: number;
     organization_id: number;
     contact_id: number;
 }

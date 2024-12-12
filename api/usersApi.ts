@@ -56,7 +56,6 @@ const usersApi = {
                 throw new Error('No users found with the provided user IDs.');
             }
 
-            console.log('Users:', usersData);
             return usersData;
         } catch (error) {
             console.error('Error fetching users:', error);

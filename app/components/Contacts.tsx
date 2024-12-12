@@ -29,6 +29,7 @@ const Contacts: React.FC<ContactsProps> = ({ contacts, updateApp, user}) => {
             ) : (
                 <FlatList
                     data={contacts}
+                    //@ts-ignore
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <ContactCard contact={item} adminControls={true} updateApp={updateApp}/>

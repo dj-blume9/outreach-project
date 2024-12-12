@@ -21,6 +21,7 @@ const Hub: React.FC<HubProps> = ({ session }) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [user, setUser] = useState<User>();
     const [refreshKey, setRefreshKey] = useState<number>(0);
+    const [cachedComponent, setCachedComponent] = useState<string>('Dashboard');
     
     const getUser = async () => {
         try {
@@ -39,7 +40,7 @@ const Hub: React.FC<HubProps> = ({ session }) => {
             if(session.user.id) {
                 let organizationId = await organizationsApi.fetchOrganizationIdsByUserId(session.user.id);
                 const fetchedContacts = await contactsApi.fetchContactsByOrganization(organizationId[0]);
-                setContacts(fetchedContacts);
+                setContacts(fetchedContacts.filter(c => c.id !== null));
             }
         } catch (error) {
             console.error('Error fetching contacts:', error);
@@ -77,10 +78,20 @@ const Hub: React.FC<HubProps> = ({ session }) => {
         }        
     };
 
+    const toggleSettings = () => {
+        setCachedComponent(activeComponent);
+        if(activeComponent != 'Account') {
+            setActiveComponent('Account');
+        }
+        else{
+            setActiveComponent(cachedComponent);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => setActiveComponent('Account')}>
+                <TouchableOpacity onPress={() => toggleSettings()}>
                     <MaterialIcons name={'settings'} size={40} color={'black'} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={updateApp}>
