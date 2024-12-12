@@ -9,6 +9,11 @@ dist/
 web-build/
 expo-env.d.ts
 
+# .idea
+.idea/*
+!.idea/vcs.xml
+!.idea/runConfigurations/
+
 # Native
 *.orig.*
 *.jks
