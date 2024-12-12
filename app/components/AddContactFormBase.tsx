@@ -5,12 +5,11 @@ import {
     TextInput,
     TouchableOpacity,
     Text,
-    ScrollView,
-    Platform,
     SafeAreaView,
     FlatList
 } from 'react-native';
 import { User } from "@/types/User";
+import {Contact} from "@/types/Contact";
 import DropDownPicker from 'react-native-dropdown-picker';
 import {SafeAreaProvider} from "react-native-safe-area-context";
 
@@ -32,6 +31,7 @@ const AddContactFormBase: React.FC<AddContactFormBaseProps> = ({ user }) => {
         { label: 'Banana', value: 'banana' },
         { label: 'Orange', value: 'orange' },
     ]);
+    const [newContact, setNewContact] = useState<Contact>();
 
     // Update isDisabled when any input changes
     useEffect(() => {
@@ -92,6 +92,25 @@ const AddContactFormBase: React.FC<AddContactFormBaseProps> = ({ user }) => {
         }
     }
 
+    const handleSubmit = async () => {
+        // Create new contact object
+        const contact: Contact = {
+            first_name: firstName,
+            last_name: lastName,
+            email_address: email,
+            phone_number: phoneNumber,
+            assigned_user_id: dropdownValue !== 'unassigned' ? dropdownValue : undefined,
+        };
+        setNewContact(contact);
+
+        // Clear form
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setPhoneNumber('');
+        setDropdownValue('unassigned');
+    }
+
     return (
         <View style={styles.container}>
             <SafeAreaProvider>
@@ -117,6 +136,7 @@ const AddContactFormBase: React.FC<AddContactFormBaseProps> = ({ user }) => {
             <TouchableOpacity
                 style={[styles.addContactButton, isDisabled ? styles.addContactButtonDisabled : null]}
                 disabled={isDisabled}
+                onPress={handleSubmit}
             >
                 <Text style={styles.addContactButtonText}>Add Contact</Text>
             </TouchableOpacity>
