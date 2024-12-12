@@ -12,6 +12,7 @@ import { User } from "@/types/User";
 import {Contact} from "@/types/Contact";
 import DropDownPicker from 'react-native-dropdown-picker';
 import {SafeAreaProvider} from "react-native-safe-area-context";
+import usersApi from "@/api/usersApi";
 
 interface AddContactFormBaseProps {
     user: User;
@@ -26,12 +27,25 @@ const AddContactFormBase: React.FC<AddContactFormBaseProps> = ({ user }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [dropdownValue, setDropdownValue] = useState('unassigned');
     const [assignableUsers, setAssignableUsers] = useState([
-        { label: 'Unassigned', value: 'unassigned' },
-        { label: 'Apple', value: 'apple' },
-        { label: 'Banana', value: 'banana' },
-        { label: 'Orange', value: 'orange' },
+        { label: 'Unassigned', value: 'unassigned' }
     ]);
     const [newContact, setNewContact] = useState<Contact>();
+
+    useEffect(() => {
+        // Fetch assignable users
+        const fetchAssignableUsers = async () => {
+            try {
+                const users = await usersApi.fetchUsersByOrganization(1);
+                const newAssignableUsers = users.map((user) => {
+                    return { label: user.full_name, value: user.id };
+                });
+                setAssignableUsers(assignableUsers.concat(newAssignableUsers));
+            } catch (error) {
+                console.error('Error fetching assignable users:', error);
+            }
+        }
+        fetchAssignableUsers();
+    }, []);
 
     // Update isDisabled when any input changes
     useEffect(() => {
@@ -99,7 +113,7 @@ const AddContactFormBase: React.FC<AddContactFormBaseProps> = ({ user }) => {
             last_name: lastName,
             email_address: email,
             phone_number: phoneNumber,
-            assigned_user_id: dropdownValue !== 'unassigned' ? dropdownValue : undefined,
+            assigned_user_id: dropdownValue !== 'unassigned' ? dropdownValue : null,
         };
         setNewContact(contact);
 

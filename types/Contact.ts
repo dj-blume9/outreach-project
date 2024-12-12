@@ -8,5 +8,5 @@
     custom_fields?: Record<string, any>; // JSON structure
     created_at?: string; // ISO timestamp
     updated_at?: string; // ISO timestamp
-    assigned_user_id?: string; // UUID
+    assigned_user_id?: string | null; // UUID
 }
