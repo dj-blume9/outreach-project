@@ -69,7 +69,7 @@ const Hub: React.FC<HubProps> = ({ session }) => {
             case 'Dashboard':
                 return <Dashboard key={refreshKey} user={user} contacts={contacts} updateApp={updateApp}/>;
             case 'Contacts':
-                return <Contacts key={refreshKey} contacts={contacts} updateApp={updateApp}/>;
+                return <Contacts key={refreshKey} contacts={contacts} updateApp={updateApp} user={user}/>;
             case 'Account':
                 return <Account key={refreshKey} session={session} />;
             default:

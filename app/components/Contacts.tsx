@@ -4,22 +4,24 @@ import {Contact} from '@/types/Contact';
 import ContactCard from "@/app/components/ContactCard";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AddContactModal from "@/app/components/AddContactModal";
+import {User} from "@/types/User";
 
 interface ContactsProps {
     contacts: Contact[];
     updateApp: () => void;
+    user: User;
 }
 
-const Contacts: React.FC<ContactsProps> = ({ contacts, updateApp}) => {
+const Contacts: React.FC<ContactsProps> = ({ contacts, updateApp, user}) => {
     const [modalVisible, setModalVisible] = useState(false);
     
     return (
         <View style={styles.container}>
-            <AddContactModal visible={modalVisible} onClose={() => setModalVisible(false)}/>
+            <AddContactModal user={user} visible={modalVisible} onClose={() => setModalVisible(false)}/>
             <View style={styles.header}>
                 <Text style={styles.headerText}>Contacts</Text>
-                <TouchableOpacity style={styles.addContactButton}>
-                    <MaterialIcons name={'person-add'} size={34} color={'#111'} onPress={() => setModalVisible(true)}/>
+                <TouchableOpacity style={styles.addContactButton} onPress={() => setModalVisible(true)}>
+                    <MaterialIcons name={'person-add'} size={34} color={'#111'} />
                 </TouchableOpacity>
             </View>
             {contacts.length === 0 ? (
