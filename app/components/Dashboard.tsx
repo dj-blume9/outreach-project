@@ -1,5 +1,5 @@
 ﻿import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, FlatList} from 'react-native';
 import {Contact} from "@/types/Contact";
 import {User} from "@/types/User";
 import ContactList from "@/app/components/ContactList";
@@ -14,25 +14,47 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({user, contacts, updateApp}) => {
     const [unassignedContacts, setUnassignedContacts] = useState<Contact[]>([]);
     const [newContacts, setNewContacts] = useState<Contact[]>([]);
+    const [myContacts, setMyContacts] = useState<Contact[]>([]);
     
     
     useEffect(() => {
         setUnassignedContacts(getUnassignedContacts(contacts));
         setNewContacts(getNewContacts(contacts));
+        setMyContacts(contacts.filter(contact => contact.assigned_user_id === user.id));
     }, []);
+
+    const flatListData = [
+        {
+            title: 'Unassigned Contacts',
+            data: unassignedContacts,
+        },
+        {
+            title: 'New Contacts',
+            data: newContacts,
+        },
+        {
+            title: 'My Contacts',
+            data: contacts,
+        }
+    ];
     
     if(user.role_id == 1)
     {
         return (
             <View style={styles.container}>
-                <Text style={styles.header}>
-                    Unassigned Contacts
-                </Text>
-                <ContactList contacts={unassignedContacts} updateApp={updateApp}/>
-                <Text style={styles.header}>
-                    New Contacts
-                </Text>
-                <ContactList contacts={newContacts} updateApp={updateApp}/>
+                <FlatList
+                    data={flatListData}
+                    renderItem={
+                        ({item}) => (
+                            <View>
+                                <Text style={styles.header}>
+                                    {item.title}
+                                </Text>
+                                <ContactList contacts={item.data} updateApp={updateApp}/>
+                            </View>
+                        )
+                    }
+                />
             </View>
         );
     }
