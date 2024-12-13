@@ -5,18 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8fd340d4-a386-4d8d-8b29-ca0f50290aeb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/components/DropdownField.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/components/InputField.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/hooks/useContactForm.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/types/InputItem.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/contactsApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/contactsApi.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/usersApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/usersApi.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/AddContactFormBase.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/AddContactFormBase.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/Contacts.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/Contacts.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/Hub.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/Hub.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/contactsHelper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/contactsHelper.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/types/OrganizationContacts.ts" beforeDir="false" afterPath="$PROJECT_DIR$/types/OrganizationContacts.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
